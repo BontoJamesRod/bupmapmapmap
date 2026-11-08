@@ -7,7 +7,9 @@ export type View =
   | { name: "place"; id: string }
   | { name: "route"; from: Endpoint | null; to: string }
   | { name: "about" }
-  | { name: "qr"; id: string };
+  | { name: "qr"; id: string }
+  | { name: "search" }
+  | { name: "places" };
 
 export function parseHash(hash: string): View {
   const h = hash.replace(/^#\/?/, "");
@@ -17,6 +19,8 @@ export function parseHash(hash: string): View {
   if (parts[0] === "place" && parts[1]) return { name: "place", id: parts[1] };
   if (parts[0] === "about") return { name: "about" };
   if (parts[0] === "qr" && parts[1]) return { name: "qr", id: parts[1] };
+  if (parts[0] === "search") return { name: "search" };
+  if (parts[0] === "places") return { name: "places" };
   if (parts[0] === "route" && params.get("to")) {
     return { name: "route", from: parseEndpoint(params.get("from")), to: params.get("to")! };
   }
@@ -43,6 +47,8 @@ export const href = {
     `#/route?${from ? `from=${encodeURIComponent(endpointParam(from))}&` : ""}to=${encodeURIComponent(to)}`,
   about: () => "#/about",
   qr: (id: string) => `#/qr/${encodeURIComponent(id)}`,
+  search: () => "#/search",
+  places: () => "#/places",
 };
 
 export const go = (h: string) => { if (location.hash !== h) location.hash = h; };

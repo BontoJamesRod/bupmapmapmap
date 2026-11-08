@@ -260,6 +260,7 @@ ul.plain li {
   padding: 9px 0; border-bottom: 1px solid var(--border);
 }
 ul.plain li:last-child { border-bottom: 0; }
+ul.plain.prose li { display: block; }
 
 /* ── buttons ── */
 .actions { display: flex; gap: 8px; margin: 16px 0 4px; flex-wrap: wrap; }
@@ -417,4 +418,154 @@ details[open] > summary .chev { transform: rotate(180deg); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ── segmented control (Appearance) ── */
+.segmented {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; margin-top: 6px;
+  background: var(--surface-2); border-radius: 12px;
+}
+.segmented button {
+  display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 38px;
+  border: 0; border-radius: 9px; background: transparent; color: var(--text-2);
+  font: inherit; font-size: 0.9rem; font-weight: 550; cursor: pointer;
+}
+.segmented button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+
+/* ══ Phone layout (≤ 899 px): app-style shell ══════════════════════════════════════════
+   Sizes follow the iOS HIG / Material guidance used by mainstream apps:
+   ≥ 44 px icon targets, 48 px buttons and fields, 56 px tab bar (+ home-indicator inset),
+   56–60 px list rows, 16 px body text (also stops iOS zooming into focused inputs). */
+:root { --tabbar-h: calc(56px + env(safe-area-inset-bottom)); }
+.tabbar, .sheet, .search-page, .search-launch { display: none; }
+
+@media (max-width: 899px) {
+  html, body { overscroll-behavior: none; }
+  body { font-size: 16px; }
+  a, button, summary, select, input, label { touch-action: manipulation; }
+
+  /* top bar: logo + search pill */
+  .topbar { padding: max(10px, env(safe-area-inset-top)) 12px 0; gap: 10px; }
+  .brand .mark { width: 44px; height: 44px; border-radius: 13px; }
+  .search-launch {
+    flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px;
+    height: 48px; padding: 0 18px; border-radius: 24px; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--border-strong); box-shadow: var(--shadow);
+    color: var(--text-3); font-size: 16px;
+  }
+  .search-launch span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .search-launch:active { background: var(--surface-2); }
+  .fab { width: 44px; height: 44px; top: calc(max(10px, env(safe-area-inset-top)) + 60px); }
+  .offline-pill { top: calc(max(10px, env(safe-area-inset-top)) + 60px); }
+
+  /* bottom tab bar */
+  .tabbar {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 1020;
+    height: var(--tabbar-h); padding-bottom: env(safe-area-inset-bottom);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--surface); border-top: 1px solid var(--border);
+  }
+  .tab {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-height: 56px; color: var(--text-3); text-decoration: none; user-select: none; -webkit-user-select: none;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.01em;
+  }
+  .tab.active { color: var(--accent); }
+  .tab:active { background: var(--surface-2); }
+
+  /* draggable bottom sheet */
+  .sheet {
+    position: absolute; left: 0; right: 0; bottom: var(--tabbar-h); z-index: 1000;
+    display: flex; flex-direction: column;
+    background: var(--surface); color: var(--text);
+    border-top: 1px solid var(--border); border-radius: 20px 20px 0 0;
+    box-shadow: 0 -6px 28px rgba(31, 30, 29, 0.14);
+    transition: height 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .sheet.dragging { transition: none; }
+  .sheet-grab { flex: none; height: 28px; display: grid; place-items: center; touch-action: none; cursor: grab; }
+  .sheet-handle { position: relative; width: 56px; height: 28px; border: 0; padding: 0; background: transparent; cursor: grab; }
+  .sheet-handle::before {
+    content: ""; position: absolute; left: 10px; right: 10px; top: 11px; height: 5px; border-radius: 3px;
+    background: var(--surface-3);
+  }
+  .sheet-body { flex: 1; min-height: 0; overflow: hidden; overscroll-behavior: contain; }
+  .sheet.snap-full .sheet-body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .sheet .card { padding: 0 16px 28px; }
+
+  /* touch-size controls */
+  .btn { min-height: 48px; padding: 0 18px; font-size: 16px; border-radius: 12px; }
+  .actions { gap: 10px; }
+  .actions .btn { flex: 1 1 0; }
+  .actions .btn.primary { flex-basis: 100%; }
+  .icon-btn { width: 44px; height: 44px; }
+  .icon-btn.bordered { width: 48px; height: 48px; }
+  .select select { min-height: 48px; font-size: 16px; }
+  .segmented button { min-height: 44px; font-size: 15px; }
+  .chip { min-height: 40px; padding: 8px 14px; font-size: 15px; }
+
+  .card h2.serif { font-size: 1.5rem; }
+  .lede, .step-text { font-size: 16px; }
+  .home .hello { font-size: 1.6rem; }
+  .home .lede { display: none; }
+  .home .chips {
+    flex-wrap: nowrap; overflow-x: auto; margin: 12px -16px 0; padding: 0 16px 4px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .home .chips::-webkit-scrollbar { display: none; }
+  .home .chip { flex: none; }
+  .home-more { margin-top: 8px; }
+
+  .steps li { min-height: 56px; }
+  .step-icon { width: 34px; height: 34px; }
+  .summary .big { font-size: 2.1rem; }
+  ul.plain li { min-height: 48px; align-items: center; }
+  .place-list summary { min-height: 56px; }
+  .place-list ul.links li { padding: 0; }
+  .place-list ul.links a { display: flex; align-items: center; min-height: 48px; }
+
+  /* map chrome sits above the sheet; OSM attribution must stay visible */
+  .leaflet-bottom.leaflet-right { bottom: calc(var(--tabbar-h) + var(--sheet-h, 148px)); transition: bottom 0.32s; }
+  .toast { top: auto; bottom: calc(var(--tabbar-h) + var(--sheet-h, 148px) + 16px); }
+  :root[data-sheet="full"] .leaflet-bottom.leaflet-right { visibility: hidden; } /* map is covered; credit shows again when it isn't */
+
+  /* full-screen search */
+  .search-page {
+    position: absolute; left: 0; right: 0; top: 0; bottom: var(--tabbar-h); z-index: 1015;
+    display: flex; flex-direction: column; background: var(--surface);
+  }
+  .search-page-head {
+    display: flex; align-items: center; gap: 4px;
+    padding: max(10px, env(safe-area-inset-top)) 12px 10px 4px; border-bottom: 1px solid var(--border);
+  }
+  .search-page-field { position: relative; flex: 1; min-width: 0; }
+  .search-page-field input {
+    width: 100%; height: 48px; padding: 0 46px; border-radius: 24px;
+    border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text);
+    font: inherit; font-size: 16px; -webkit-appearance: none; appearance: none;
+  }
+  .search-page-field input::placeholder { color: var(--text-3); }
+  .search-page-field input::-webkit-search-cancel-button { display: none; }
+  .search-page-field input:focus { outline: none; border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .field-icon { position: absolute; left: 16px; top: 15px; color: var(--text-3); pointer-events: none; }
+  .field-clear {
+    position: absolute; right: 2px; top: 2px; width: 44px; height: 44px; border: 0; border-radius: 22px;
+    display: grid; place-items: center; background: transparent; color: var(--text-3);
+  }
+  .search-page-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 0 16px 24px; }
+  .search-page-body .section-label { margin-top: 16px; }
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .row {
+    width: 100%; min-height: 60px; display: flex; align-items: center; gap: 14px; padding: 8px 2px;
+    border: 0; border-bottom: 1px solid var(--border); background: transparent; color: var(--text);
+    font: inherit; text-align: left; cursor: pointer;
+  }
+  .row:active { background: var(--surface-2); }
+  .row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .row-text strong { font-size: 16px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row-text small { font-size: 13.5px; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row-chev { color: var(--text-3); }
+  .cat-badge.lg { width: 40px; height: 40px; border-radius: 12px; }
+  .hint { margin-top: 16px; }
+  .empty-state { text-align: center; padding: 48px 12px; font-size: 16px; }
 }

@@ -35,5 +35,5 @@ export function useTheme() {
     return () => mq.removeEventListener("change", on);
   }, [pref]);
   const cycle = useCallback(() => setPref((p) => ORDER[(ORDER.indexOf(p) + 1) % ORDER.length]), []);
-  return { pref, cycle };
+  return { pref, cycle, setPref };
 }

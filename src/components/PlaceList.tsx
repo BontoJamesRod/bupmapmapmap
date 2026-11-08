@@ -4,7 +4,7 @@ import { CATEGORY } from "../lib/categories";
 import { href } from "../lib/url";
 
 /** Map-free list of every place: the accessible way to browse the campus (FR-DIR-01). */
-export function PlaceList({ places }: { places: Place[] }) {
+export function PlaceList({ places, openAll = false }: { places: Place[]; openAll?: boolean }) {
   const groups = new Map<Category | "unknown", Place[]>();
   for (const p of places) {
     const k = p.properties.identified ? p.properties.category : "unknown";
@@ -18,7 +18,7 @@ export function PlaceList({ places }: { places: Place[] }) {
         const Icon = k === "unknown" ? CircleHelp : CATEGORY[k].Icon;
         const items = groups.get(k)!.sort((a, b) => a.properties.name.localeCompare(b.properties.name));
         return (
-          <details key={k} open={k === "academic"}>
+          <details key={k} open={openAll ? k !== "unknown" : k === "academic"}>
             <summary>
               <span className="group-icon" style={{ color: k === "unknown" ? undefined : CATEGORY[k].color }} aria-hidden>
                 <Icon size={16} />

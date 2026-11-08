@@ -11,11 +11,16 @@ const ROUTE_COLOR = "#C2593A"; // clay accent, matches the UI
 const USER_COLOR = "#2F6FDB";
 
 /** Padding that keeps framed content out from under the floating panel and search bar. */
-function viewPadding(extra = 0): L.FitBoundsOptions {
+function viewPadding(extra = 0, focus = false): L.FitBoundsOptions {
   const desktop = window.innerWidth >= 900;
+  // Phone: the bottom sheet's current height (set by BottomSheet). When focusing a place or route
+  // the sheet opens to half, so reserve at least that much.
+  const sheet = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--sheet-h")) || 148;
+  const below = 56 + Math.max(sheet, focus ? (window.innerHeight - 56) * 0.5 : 0);
   return desktop
     ? { paddingTopLeft: [420 + extra, 72 + extra], paddingBottomRight: [24 + extra, 24 + extra] }
-    : { paddingTopLeft: [12 + extra, 72 + extra], paddingBottomRight: [12 + extra, Math.round(window.innerHeight * 0.45) + extra] };
+    // phone: top bar above; tab bar + bottom sheet below
+    : { paddingTopLeft: [12 + extra, 72 + extra], paddingBottomRight: [12 + extra, Math.round(below) + extra] };
 }
 
 interface Props {
@@ -145,7 +150,7 @@ export function MapView({ campus, selectedId, route, routeEnds, userPos, onSelec
       if (f) {
         const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
         const b = f.geometry.type === "Point" ? L.latLng(ll(f.geometry.coordinates)).toBounds(40) : L.latLngBounds(outlineRings(f).flat().map(ll));
-        m.flyToBounds(b, { ...viewPadding(40), maxZoom: 19, animate: !reduce, duration: 0.5 });
+        m.flyToBounds(b, { ...viewPadding(40, true), maxZoom: 19, animate: !reduce, duration: 0.5 });
       }
     }
   }, [selectedId, route, campus]);
@@ -167,7 +172,7 @@ export function MapView({ campus, selectedId, route, routeEnds, userPos, onSelec
       }).addTo(layer);
     }
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    m.flyToBounds(L.latLngBounds(pts), { ...viewPadding(32), maxZoom: 19.5, animate: !reduce, duration: 0.6 });
+    m.flyToBounds(L.latLngBounds(pts), { ...viewPadding(32, true), maxZoom: 19.5, animate: !reduce, duration: 0.6 });
   }, [route, routeEnds]);
 
   // User location

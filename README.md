@@ -4,7 +4,7 @@
 
 Find any building, office or room at BU Polangui, and get walking directions to it, from any phone or laptop. No account, no install, no tracking.
 
-> Status: **Release candidate (v0.2).** Map, search, building details, walking directions through hallways, offline mode and printable QR signs all work. Five small buildings still need names. See the [Changelog](CHANGELOG.md) and [Roadmap](docs/09-roadmap.md).
+> Status: **Release candidate (v0.3).** Map, search, building details, walking directions through hallways, offline mode and printable QR signs all work. Five small buildings still need names. See the [Changelog](CHANGELOG.md) and [Roadmap](docs/09-roadmap.md).
 
 ## Features
 
@@ -15,7 +15,8 @@ Find any building, office or room at BU Polangui, and get walking directions to 
 - **Start from your location.** Uses GPS on https only, and your location never leaves your phone.
 - **Shareable links** for every place and route, plus **printable QR signs** to post at buildings.
 - **Works offline** after the first visit, and can be installed to the home screen as a PWA.
-- **Light and dark themes**, a mobile bottom sheet, keyboard search (press `/`), and a map-free list of every place.
+- **Built for phones.** It has a bottom tab bar, a draggable bottom sheet, full-screen search, and standard 44–48 px touch targets.
+- **Light and dark themes**, keyboard search on desktop (press `/`), and a map-free list of every place.
 
 ## Run it
 

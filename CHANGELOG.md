@@ -2,6 +2,23 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com/). App versions use SemVer. Campus data is versioned by date (shown on the About screen).
 
+## [0.3.0] - 2026-11-08
+
+### Added
+- **Phone version.** On screens up to 899 px wide the app switches to a mobile app layout:
+  - A **bottom tab bar** (Map · Search · Places · More), 56 px tall plus the home-indicator inset, like mainstream social and map apps.
+  - A **draggable bottom sheet** that snaps to peek, half and full. Swipe up to expand, pull down at the top of the content to collapse, and flicks are supported. Each screen opens at a sensible height.
+  - A **full-screen search** page with the keyboard up, popular places, and 60 px result rows.
+  - A **Places** tab, a browsable list of everything.
+  - A **More** tab: About, plus an **Appearance** setting (Device / Light / Dark).
+- **Standard touch sizes** on phones:
+  - icon targets of at least 44 px;
+  - 48 px buttons, fields and selects;
+  - list rows of 48–60 px;
+  - 16 px body and input text, which also stops iOS zooming into the search field;
+  - safe-area padding for notches and home indicators.
+- The map frames places and routes above the sheet. The OpenStreetMap credit sits above the sheet so it stays visible.
+
 ## [0.2.0] - 2026-11-08
 
 ### Added

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Info, Maximize2, Monitor, Moon, Sun, WifiOff, X } from "lucide-react";
+import { Info, Maximize2, Monitor, Moon, Search, Sun, WifiOff, X } from "lucide-react";
 import type { Campus, Endpoint, Graph, LngLat, Place, RouteResult } from "./types";
 import { MapView } from "./map/MapView";
 import { SearchBox } from "./components/SearchBox";
@@ -8,12 +8,16 @@ import { Directions } from "./components/Directions";
 import { PlaceList } from "./components/PlaceList";
 import { QrSign } from "./components/QrSign";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { TabBar } from "./components/TabBar";
+import { BottomSheet, type Snap } from "./components/BottomSheet";
+import { SearchPage } from "./components/SearchPage";
+import { useIsMobile } from "./lib/useMediaQuery";
 import { createSearch } from "./lib/search";
 import { Router } from "./lib/routing";
 import { distanceM } from "./lib/geo";
 import { go, href, shareUrl, useView } from "./lib/url";
 import { CATEGORY } from "./lib/categories";
-import { useTheme } from "./lib/theme";
+import { useTheme, type ThemePref } from "./lib/theme";
 import { ON_CAMPUS_RADIUS_M, POPULAR } from "./config";
 
 interface Data { campus: Campus; graph: Graph }
@@ -91,6 +95,16 @@ function Navi({ campus, graph }: Data) {
   const router = useMemo(() => new Router(graph, places), [graph, places]);
   const theme = useTheme();
   const online = useOnline();
+  const mobile = useIsMobile();
+
+  // Phone bottom sheet: each screen opens at a sensible height; the user can drag it from there.
+  const viewKey = view.name === "place" || view.name === "qr" ? `${view.name}:${view.id}` : view.name === "route" ? `route:${view.to}` : view.name;
+  const defaultSnap: Snap = view.name === "home" ? "peek" : view.name === "places" || view.name === "about" ? "full" : "half";
+  const [snap, setSnap] = useState<Snap>(defaultSnap);
+  useEffect(() => { setSnap(defaultSnap); }, [viewKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Desktop has the search box in the top bar; the phone search screen only exists on phones.
+  useEffect(() => { if (!mobile && view.name === "search") go(href.home()); }, [mobile, view.name]);
 
   const [userPos, setUserPos] = useState<{ coord: LngLat; accuracy: number } | null>(null);
   const [locating, setLocating] = useState(false);
@@ -201,10 +215,27 @@ function Navi({ campus, graph }: Data) {
     return p ? <QrSign place={p} /> : null;
   }
 
+  const popular = POPULAR.map((id) => byId.get(id)).filter((p): p is Place => Boolean(p));
+
   // ── panel content ──
   let panel: React.ReactNode;
   if (view.name === "about") {
-    panel = <About campus={campus} />;
+    panel = <About campus={campus} theme={theme.pref} onTheme={theme.setPref} />;
+  } else if (view.name === "places") {
+    const named = places.filter((p) => p.properties.identified).length;
+    panel = (
+      <div className="card">
+        <header className="card-head">
+          <div className="card-title">
+            <span className="eyebrow">Browse</span>
+            <h2 className="serif">All places</h2>
+            <p className="muted small">{places.length} places · {named} named</p>
+          </div>
+          {!mobile && <a className="icon-btn" href={href.home()} aria-label="Close"><X size={18} aria-hidden /></a>}
+        </header>
+        <PlaceList places={places} openAll />
+      </div>
+    );
   } else if (routeState && selected) {
     const fromId = routeState.from.kind === "place" ? routeState.from.id : null;
     panel = (
@@ -241,7 +272,7 @@ function Navi({ campus, graph }: Data) {
         <h1 className="serif hello">{greeting()}</h1>
         <p className="muted lede">Where are you headed on campus? Search above, or pick a place.</p>
         <div className="chips" aria-label="Popular places">
-          {POPULAR.map((id) => byId.get(id)).filter((p): p is Place => Boolean(p)).map((p) => {
+          {popular.map((p) => {
             const cat = CATEGORY[p.properties.category];
             return (
               <a key={p.id} className="chip" href={href.place(p.id)}>
@@ -251,8 +282,10 @@ function Navi({ campus, graph }: Data) {
             );
           })}
         </div>
-        <h2 className="section-label">All places <span className="muted">· {named} named</span></h2>
-        <PlaceList places={places} />
+        <div className="home-more">
+          <h2 className="section-label">All places <span className="muted">· {named} named</span></h2>
+          <PlaceList places={places} />
+        </div>
       </div>
     );
   }
@@ -277,13 +310,22 @@ function Navi({ campus, graph }: Data) {
           <Mark size={30} />
           <span className="wordmark serif">BUPC Navi</span>
         </a>
-        <SearchBox search={search} onPick={(p) => go(href.place(p.id))} />
-        <button className="icon-btn floating push" onClick={theme.cycle} aria-label={themeLabel} title={themeLabel}>
-          <ThemeIcon size={18} aria-hidden />
-        </button>
-        <a href={href.about()} className="icon-btn floating" aria-label="About BUPC Navi" title="About">
-          <Info size={18} aria-hidden />
-        </a>
+        {mobile ? (
+          <a className="search-launch" href={href.search()} aria-label="Search buildings, offices and rooms">
+            <Search size={18} aria-hidden />
+            <span>Search buildings, offices, rooms</span>
+          </a>
+        ) : (
+          <>
+            <SearchBox search={search} onPick={(p) => go(href.place(p.id))} />
+            <button className="icon-btn floating push" onClick={theme.cycle} aria-label={themeLabel} title={themeLabel}>
+              <ThemeIcon size={18} aria-hidden />
+            </button>
+            <a href={href.about()} className="icon-btn floating" aria-label="About BUPC Navi" title="About">
+              <Info size={18} aria-hidden />
+            </a>
+          </>
+        )}
       </header>
 
       {!online && (
@@ -294,16 +336,31 @@ function Navi({ campus, graph }: Data) {
         <Maximize2 size={18} aria-hidden />
       </button>
 
-      <aside className={`panel ${view.name === "home" ? "peek" : ""}`} aria-label="Details">
-        {panel}
-      </aside>
+      {mobile ? (
+        <>
+          {view.name === "search" ? (
+            <SearchPage search={search} popular={popular} onPick={(p) => go(href.place(p.id))} onClose={() => go(href.home())} />
+          ) : (
+            <BottomSheet snap={snap} onSnap={setSnap} label="Details">{panel}</BottomSheet>
+          )}
+          <TabBar view={view} />
+        </>
+      ) : (
+        <aside className="panel" aria-label="Details">{panel}</aside>
+      )}
 
       {toast && <div className="toast" role="status">{toast}</div>}
     </div>
   );
 }
 
-function About({ campus }: { campus: Campus }) {
+const THEMES: { value: ThemePref; label: string; Icon: typeof Sun }[] = [
+  { value: "system", label: "Device", Icon: Monitor },
+  { value: "light", label: "Light", Icon: Sun },
+  { value: "dark", label: "Dark", Icon: Moon },
+];
+
+function About({ campus, theme, onTheme }: { campus: Campus; theme: ThemePref; onTheme: (t: ThemePref) => void }) {
   return (
     <article className="card" aria-labelledby="about-title">
       <header className="card-head">
@@ -319,8 +376,18 @@ function About({ campus }: { campus: Campus }) {
       </p>
       <p className="note">Student project, not an official Bicol University service.</p>
       <section className="facts">
+        <h3 id="appearance-label">Appearance</h3>
+        <div className="segmented" role="radiogroup" aria-labelledby="appearance-label">
+          {THEMES.map(({ value, label, Icon }) => (
+            <button key={value} role="radio" aria-checked={theme === value} className={theme === value ? "on" : ""} onClick={() => onTheme(value)}>
+              <Icon size={16} aria-hidden /> {label}
+            </button>
+          ))}
+        </div>
+      </section>
+      <section className="facts">
         <h3>How to use</h3>
-        <ul className="plain">
+        <ul className="plain prose">
           <li>Search a building, office, room or nickname (try “library” or “xerox”).</li>
           <li>Tap <strong>Directions</strong>, then pick where you're starting from.</li>
           <li>Print a <strong>QR sign</strong> for any building so others can scan for directions.</li>
