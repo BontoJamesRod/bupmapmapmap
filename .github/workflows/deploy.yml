@@ -36,7 +36,7 @@ jobs:
           VITE_REPO_URL: https://github.com/${{ github.repository }}
       - name: Check offline worker
         run: node --check dist/sw.js && ! grep -q "__PRECACHE__" dist/sw.js
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         with:
           path: dist
