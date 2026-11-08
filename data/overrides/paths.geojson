@@ -1,0 +1,26 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "kind": "footway",
+        "note": "Open passage (stairs?) between the Salceda main block and its north wing, from the stalls side into the building",
+        "source": "student-sketch:2026-11-08"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            123.485518,
+            13.296446
+          ],
+          [
+            123.485469,
+            13.296373
+          ]
+        ]
+      }
+    }
+  ]
+}

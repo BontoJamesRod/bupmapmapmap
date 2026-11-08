@@ -1,0 +1,20 @@
+{
+  "name": "BUPC Navi: BU Polangui campus map",
+  "short_name": "BUPC Navi",
+  "description": "Open campus map and walking directions for Bicol University Polangui Campus. No login.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F5F4EE",
+  "theme_color": "#F5F4EE",
+  "lang": "en",
+  "categories": ["education", "navigation", "travel"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

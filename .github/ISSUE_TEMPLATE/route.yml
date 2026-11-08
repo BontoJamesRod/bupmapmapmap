@@ -1,0 +1,22 @@
+name: Route problem
+description: Directions go through a wall or fence, or take a strange path
+labels: [data, field-test]
+body:
+  - type: input
+    id: link
+    attributes:
+      label: Route link
+      description: Tap Share on the directions screen and paste the link
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's wrong with the route?
+      description: e.g. "Step 3 tells me to cut across the fenced garden behind the Gym"
+    validations:
+      required: true
+  - type: textarea
+    id: better
+    attributes:
+      label: What's the real way to walk it?

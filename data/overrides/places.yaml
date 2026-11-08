@@ -1,0 +1,337 @@
+# BUPC Navi: campus place overrides
+# Keys are stable IDs. NEVER rename a key once published; change `name` instead.
+# Seeded 2026-11-07 from the OSM snapshot plus web research. Updated 2026-11-08 from a student's annotated map.
+# Layout: `hallway: true` draws a hallway down the middle of the building, following its shape;
+# `doors:` are [lng, lat] points (snapped onto the outline) joined straight to the hallway and the nearest road.
+# Free-standing walkways that are not doors go in data/overrides/paths.geojson.
+# See docs/04-data-model.md for the schema and docs/10-campus-data-inventory.md for the survey checklist.
+
+# ── Gates & security ─────────────────────────────────────────────
+main-gate:
+  osm: node/12686508525
+  kind: gate
+  name: Main Gate
+  category: security
+  aliases: [gate, entrance, san juan street gate]
+  verified: false
+  source: [osm]
+
+guard-house:
+  osm: way/1369878385
+  name: BUPC Guard House
+  shortName: Guard House
+  category: security
+  aliases: [guard, security, guardhouse]
+  verified: false
+  source: [osm]
+
+# ── Administrative ───────────────────────────────────────────────
+administration-building:
+  osm: way/551347993
+  name: Administration Building
+  shortName: Admin
+  category: administrative
+  aliases: [admin, admin building, cashier, accounting]   # cashier/accounting location unverified
+  floors: 2                    # student report 2026-11-08: one of only two 2-storey buildings
+  hallway: true                # centreline follows the building's shape
+  doors: [[123.485178, 13.295868]]
+  verified: false
+  source: [osm]
+
+registrar:
+  osm: way/885477496
+  name: Registrar's Office
+  shortName: Registrar
+  category: administrative
+  aliases: [registrar, records, enrollment, tor, cor]
+  floors: 1
+  doors: [[123.484967, 13.295308]]
+  verified: false
+  source: [osm]
+
+rotc-rde-building:
+  osm: way/551347996
+  name: ROTC & RDE Building   # placeholder name: two offices are tagged here
+  category: administrative
+  offices:
+    - { name: Headquarters ROTC Office }
+    - { name: Research, Development and Extension Office }
+  aliases: [rotc, rde, research office, extension]
+  floors: 1
+  doors: [[123.484421, 13.295608], [123.484572, 13.295518]]
+  verified: false
+  source: [osm]
+
+# ── Academic ─────────────────────────────────────────────────────
+nursing-department:
+  osm: way/551347954
+  name: Nursing Department
+  shortName: Nursing
+  category: academic
+  departments: [Nursing Department]
+  aliases: [nursing, bsn]
+  floors: 1
+  hallway: ring                # loop around the inner court (student sketch 2026-11-08)
+  hallwayInset: 7
+  labelAt: [123.484608, 13.296635]
+  doors: [[123.484367, 13.296749], [123.484907, 13.296561]]
+  verified: false
+  source: [osm]
+
+cesd:
+  osm: way/551347992
+  name: Computer Studies & Engineering Department
+  shortName: CESD
+  category: academic
+  departments: [Computer Studies & Engineering Department]
+  aliases: [cesd, computer studies, engineering, cs, it, is, bscs, bsit, bsis, ict, computer building]
+  floors: 1
+  hallway: true                # centreline follows the building's shape
+  doors: [[123.484744, 13.295906], [123.485123, 13.295902], [123.484874, 13.295494]]
+  verified: false
+  source: [osm, "directory:nstp-2026"]
+
+salceda-building:
+  osm: way/551347988
+  parts: [way/551347989, way/551347987]   # the two wings are mapped separately in OSM; one U-shaped building on site
+  name: Salceda Building
+  shortName: Salceda
+  category: academic
+  description: U-shaped Education Department building around the volleyball court. The campus library is on the 2nd floor.
+  departments: [Education Department]
+  aliases: [library, aklatan, lib, education, educ, beed, btled, education department, salceda north wing, salceda west wing]
+  floors: 2                    # confirmed: one of only two 2-storey buildings
+  offices:
+    - { name: BU Polangui Campus Library, floor: 2 }
+  rooms:
+    - { code: LIB, name: Library, floor: 2, type: library }
+  hallway: true                # centreline follows the building's shape
+  doors: [[123.4856, 13.296094], [123.48517, 13.296583], [123.484999, 13.296348], [123.485304, 13.296126]]
+  verified: false
+  source: [osm, "web:buls-library-page", "directory:nstp-2026"]
+
+electronics-technology-building:
+  osm: way/551347997
+  name: Electronics Technology Building
+  shortName: Electronics
+  category: academic
+  aliases: [electronics, elex, ece, et building]
+  floors: 1
+  doors: [[123.484282, 13.295729]]
+  verified: false
+  source: [osm]
+
+automotive-building:
+  osm: way/551347995
+  name: Automotive Building
+  shortName: Automotive
+  category: academic
+  aliases: [automotive, auto shop]
+  floors: 1
+  doors: [[123.484753, 13.295463]]
+  verified: false
+  source: [osm]
+
+# ── Student services, health, food ──────────────────────────────
+center-for-student-services:
+  osm: way/551347956
+  name: Center for Student Services
+  shortName: Student Services
+  category: student-services
+  offices:                     # from the NSTP directory: "CSC / NSTP / Guidance Office"
+    - { name: CSC Office }     # TODO: confirm CSC = Central Student Council
+    - { name: NSTP Office }
+    - { name: Guidance Office }
+  description: The campus waiting shed is right beside it.
+  aliases: [css, csc, student council, nstp, guidance, osas, student affairs]
+  floors: 1
+  doors: [[123.48506, 13.29629], [123.484993, 13.296181]]
+  verified: false
+  source: [osm, "directory:nstp-2026"]
+
+clinic:
+  osm: way/872167021           # CONFIRMED by a student (2026-11-08): own building, south of CSS, beside Education
+  name: Medical and Dental Clinic
+  shortName: Clinic
+  category: health
+  description: Standalone building with the campus clinic and one vacant room.
+  offices:
+    - { name: Bicol University Health Services }
+  rooms:
+    - { code: CLINIC, name: Medical and Dental Clinic, floor: 1, type: office }
+    - { code: VACANT, name: Vacant room, floor: 1, type: other }
+  aliases: [clinic, medical, dental, health services, nurse, doctor, infirmary]
+  doors: [[123.485556, 13.295863]]
+  verified: true
+  source: [osm, "student-report:2026-11-08"]
+
+canteen:
+  osm: way/551347951
+  name: BUP Canteen
+  shortName: Canteen
+  category: food
+  aliases: [canteen, cafeteria, food, kainan]
+  floors: 1
+  verified: false
+  source: [osm]
+
+photocopy-shop:
+  kind: poi
+  geometry: { type: Point, coordinates: [123.485499, 13.296522] }
+  name: Photocopy Shop
+  shortName: Photocopy
+  category: commercial
+  description: In between the Entrepreneurship students' stalls, across the road from the Salceda Building.
+  aliases: [xerox, print, printing, photocopy, photo copy]
+  verified: true
+  source: ["student-report:2026-11-08"]
+
+photocopy-old-footprint:
+  osm: way/1369878389          # OSM still maps the photocopy shop here, near the gate; it is now among the Entrep stalls
+  retired: true
+
+# ── Sports & residential ────────────────────────────────────────
+gymnasium:
+  osm: way/551347999
+  name: Gymnasium
+  shortName: Gym
+  category: sports
+  aliases: [gym, covered court, pe]
+  floors: 1
+  doors: [[123.484362, 13.296275], [123.484527, 13.295984]]
+  verified: false
+  source: [osm]
+
+dormstel:
+  osm: way/551347950
+  name: Dormstel Building
+  shortName: Dormstel
+  category: residential
+  aliases: [dorm, dormitory, hostel]
+  doors: [[123.484233, 13.296891]]
+  verified: false
+  source: [osm]
+
+# ── Identified on site (student report, 2026-11-08) ─────────────
+nstp-building:
+  osm: way/870511318           # was bldg-a05
+  name: NSTP Building
+  shortName: NSTP
+  category: academic
+  description: Behind the canteen.
+  aliases: [nstp, nstp building, cwts, lts]
+  floors: 1
+  verified: true
+  source: [osm, "student-report:2026-11-08"]
+
+waiting-shed:
+  osm: way/551347955           # was bldg-a10
+  name: Waiting Shed
+  shortName: Shed
+  category: utility
+  description: Covered waiting area beside the Center for Student Services (CSC office).
+  aliases: [shed, waiting area, tambayan]
+  floors: 1
+  verified: true
+  source: [osm, "student-report:2026-11-08"]
+
+entrepreneurship-department:
+  osm: way/551347947           # was bldg-a08
+  name: Entrepreneurship Department
+  shortName: Entrep
+  category: academic
+  departments: [Entrepreneurship Department]
+  aliases: [entrep, entrepreneurship, bs entrep, bsentrep]
+  floors: 1
+  doors: [[123.483895, 13.29634]]
+  verified: true
+  source: [osm, "student-sketch:2026-11-08"]
+
+entrepreneurship-annex:
+  osm: way/551347948           # was bldg-a07; same "ENTREP" label on the sketch
+  name: Entrepreneurship Department (Annex)
+  shortName: Entrep Annex
+  category: academic
+  departments: [Entrepreneurship Department]
+  aliases: [entrep, entrepreneurship]
+  floors: 1
+  verified: true
+  source: [osm, "student-sketch:2026-11-08"]
+
+technology-department:
+  osm: way/551347998           # was bldg-a11
+  name: Technology Department
+  shortName: Tech Dept
+  category: academic
+  departments: [Technology Department]
+  aliases: [tech, tech dept, technology, industrial technology]
+  floors: 1
+  doors: [[123.483955, 13.295972]]
+  verified: true
+  source: [osm, "student-sketch:2026-11-08"]
+
+# ── Open areas (outlines traced from the student's sketch) ──────
+volleyball-court:
+  kind: area
+  surface: court
+  geometry: { type: Polygon, coordinates: [[[123.48505, 13.29639], [123.485454, 13.29612], [123.485544, 13.296249], [123.48514, 13.296519], [123.48505, 13.29639]]] }
+  name: Volleyball Court
+  shortName: Court
+  category: sports
+  description: Open court in the middle of the Salceda Building.
+  aliases: [court, volleyball, salceda court]
+  doors: [[123.485252, 13.296255], [123.485342, 13.296384], [123.485499, 13.296185], [123.485434, 13.296323]]
+  verified: true
+  source: ["student-sketch:2026-11-08"]
+
+entrep-stalls:
+  kind: area
+  surface: paved
+  geometry: { type: Polygon, coordinates: [[[123.485244, 13.296668], [123.485746, 13.296332], [123.48577, 13.296366], [123.485267, 13.296702], [123.485244, 13.296668]]] }
+  name: Entrepreneurship Stalls
+  shortName: Entrep Stalls
+  category: commercial
+  description: Stalls run by Entrepreneurship students, across the road from the Salceda Building, along the campus fence. The photocopy shop is here.
+  aliases: [stalls, entrep stalls, tindahan, snacks, store, entrepreneurship stalls]
+  labelAt: [123.485647, 13.296423]
+  verified: true
+  source: ["student-report:2026-11-08"]
+
+nursing-court:
+  kind: area
+  surface: court
+  geometry: { type: Polygon, coordinates: [[[123.484888, 13.296698], [123.48455, 13.29691], [123.484476, 13.296798], [123.484814, 13.296586], [123.484888, 13.296698]]] }
+  name: Nursing Court
+  shortName: Court
+  category: sports
+  description: Inner court in the middle of the Nursing Department building, used for tennis and badminton.
+  aliases: [court, badminton, tennis, nursing court, inner court]
+  doors: [[123.484719, 13.296804], [123.484645, 13.296692], [123.484851, 13.296642], [123.484513, 13.296854]]
+  verified: true
+  source: ["student-sketch:2026-11-08"]
+
+campus-field:
+  kind: area
+  surface: grass
+  geometry: { type: Polygon, coordinates: [[[123.485292, 13.295263], [123.485551, 13.295674], [123.485281, 13.295838], [123.485021, 13.295427], [123.485292, 13.295263]]] }
+  name: Grass Field
+  shortName: Grass Field
+  category: sports
+  description: Open grass field beside the Administration Building. Outline fitted to the open lawn between Admin and the roads.
+  aliases: [field, grass field, oval, open field]   # TODO: confirm the field's name from the sketch
+  verified: false
+  source: ["student-sketch:2026-11-08"]
+
+# ── Still unidentified (check on site) ──────────────────────────
+# Each "likely" note comes from lining up the NSTP Orientation Directory map with OSM
+# (poster "up" = campus northwest). Confirm before renaming.
+bldg-a01: { osm: way/870877902,  name: Unidentified Building A01, category: utility,  verified: false, source: [osm] }   # beyond Dormstel, small
+bldg-a02: { osm: way/885456221,  name: Unidentified Building A02, category: utility,  verified: false, source: [osm] }   # beyond Dormstel, small
+bldg-a03: { osm: way/551347949,  name: Unidentified Building A03, category: residential, verified: false, source: [osm] } # next to Dormstel; part of it?
+bldg-a04: { osm: way/1369878386, name: Unidentified Building A04, category: utility,  verified: false, source: [osm] }   # near Dormstel / Entrepreneurship
+bldg-a12: { osm: way/551347994,  name: Unidentified Building A12, category: administrative, verified: false, source: [osm] } # beside Registrar; part of Registrar?
+
+# ── Offices on the poster not yet placed ────────────────────────
+# BUPDMO: between Technology Dept and ROTC on the west edge. What does it stand for? Which building?
+# "Research & Development, Auxiliary, Supply Office": between ROTC and Registrar.
+#   OSM puts RDE with ROTC (way/551347996); Automotive (way/551347995) is in the same strip.

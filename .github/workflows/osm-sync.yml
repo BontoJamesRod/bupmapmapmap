@@ -1,0 +1,45 @@
+name: OSM data sync
+
+# Weekly check for upstream OpenStreetMap changes to the campus. If anything changed, opens a PR
+# so a maintainer can review it (new buildings must be named in data/overrides/places.yaml).
+# Needs: Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests".
+on:
+  schedule:
+    - cron: "0 18 * * 0" # Mondays 02:00 Philippine time
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run data:import
+      - name: Validate
+        id: validate
+        continue-on-error: true
+        run: npm run data:build
+      - name: Open PR if OSM changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- data/raw; then echo "No OSM changes."; exit 0; fi
+          branch="data/osm-sync-$(date +%F)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add data/raw
+          git commit -m "data: OSM sync $(date +%F)"
+          git push -u origin "$branch"
+          note="Validation passed."
+          [ "${{ steps.validate.outcome }}" = "failure" ] && note="⚠️ Validation failed: run \`npm run data:build\` locally and update places.yaml."
+          gh pr create --title "data: OSM sync $(date +%F)" --body "Automated weekly import from OpenStreetMap. $note"

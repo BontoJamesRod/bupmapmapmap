@@ -1,0 +1,22 @@
+BUPC Navi
+Copyright 2026 BUPC Navi contributors
+
+This product's source code is licensed under the Apache License, Version 2.0
+(see LICENSE).
+
+MAP DATA
+Campus geometry and related attributes are derived from OpenStreetMap.
+  © OpenStreetMap contributors
+  https://www.openstreetmap.org/copyright
+OpenStreetMap data is available under the Open Database License (ODbL) 1.0.
+The derived campus dataset in /data and /public/data is likewise made
+available under the ODbL 1.0: https://opendatacommons.org/licenses/odbl/1-0/
+
+ACKNOWLEDGEMENTS
+Inspired by SCNavi, Smart Campus Navigation System for Bicol University,
+by Blockers United (Apache License 2.0).
+
+DISCLAIMER
+BUPC Navi is an independent student project and is not an official service
+of Bicol University. "Bicol University" is used only to identify the campus
+this tool describes.

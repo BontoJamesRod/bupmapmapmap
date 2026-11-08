@@ -1,0 +1,36 @@
+name: Wrong or missing place
+description: A building, office or room is missing, misnamed, or in the wrong spot
+labels: [data]
+body:
+  - type: input
+    id: place
+    attributes:
+      label: Place ID or name
+      description: Shown in the app's "Report an issue" link, e.g. salceda-building
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What's wrong?
+      options: [Wrong name, Missing place, Wrong location, Missing office or room, Wrong floor, Other]
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Correct information
+      description: What it should say. A photo of the signage helps a lot.
+    validations:
+      required: true
+  - type: checkboxes
+    id: verified
+    attributes:
+      label: Verification
+      options:
+        - label: I checked this in person on campus
+  - type: input
+    id: version
+    attributes:
+      label: App / data version
+      description: Auto-filled from the app when available
