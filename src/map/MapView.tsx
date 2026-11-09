@@ -162,8 +162,14 @@ export function MapView({ campus, selectedId, route, routeEnds, userPos, onSelec
     layer.clearLayers();
     if (!route || route.length < 2) return;
     const pts = route.map(ll);
-    L.polyline(pts, { color: "#fff", weight: 10, opacity: 0.9, lineCap: "round", lineJoin: "round" }).addTo(layer);
-    L.polyline(pts, { color: ROUTE_COLOR, weight: 6, lineCap: "round", lineJoin: "round" }).addTo(layer);
+    for (const line of [
+      L.polyline(pts, { className: "route-draw", color: "#fff", weight: 10, opacity: 0.9, lineCap: "round", lineJoin: "round" }),
+      L.polyline(pts, { className: "route-draw", color: ROUTE_COLOR, weight: 6, lineCap: "round", lineJoin: "round" }),
+    ]) {
+      line.addTo(layer);
+      // Normalised length lets CSS draw the line in from start to destination, whatever its real length.
+      line.getElement()?.setAttribute("pathLength", "1");
+    }
     if (routeEnds) {
       L.circleMarker(ll(routeEnds.from), { radius: 8, color: "#fff", weight: 3, fillColor: ROUTE_COLOR, fillOpacity: 1 }).addTo(layer);
       L.marker(ll(routeEnds.to), {

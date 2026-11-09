@@ -30,6 +30,13 @@
   --walk-casing: rgba(255, 255, 255, 0.88);
   --walk-indoor: #2a2f45;
   --walk-outdoor: #5a4632;
+  /* motion: quick, springy feedback in the manner of social-app interfaces */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-1: 120ms;
+  --dur-2: 240ms;
+  --dur-3: 380ms;
   color-scheme: light;
 }
 
@@ -416,21 +423,114 @@ details[open] > summary .chev { transform: rotate(180deg); }
   .qr { width: 110mm; }
 }
 
+/* ── motion ──
+   Everything here moves only transform-family properties (translate, scale) and opacity, so it stays
+   on the compositor. Each animation starts from a state that is also fine to stop in, and the
+   reduced-motion block below turns all of it off. */
+
+/* press: everything you can tap gives under your finger */
+.btn, .chip, .icon-btn, .fab, .tab svg, .row, .search-launch, .segmented button, .results li, .place-list summary {
+  transition-property: background-color, border-color, color, scale;
+  transition-duration: var(--dur-1);
+  transition-timing-function: var(--ease-out);
+}
+.btn:active, .chip:active, .icon-btn:active, .fab:active, .search-launch:active { scale: 0.96; }
+.row:active, .results li:active, .place-list summary:active { scale: 0.985; }
+.tab:active svg { scale: 0.86; }
+.segmented button:active { scale: 0.95; }
+
+/* tab bar: the active icon pops when you land on it */
+.tab.active svg { animation: tab-pop var(--dur-3) var(--ease-spring); }
+@keyframes tab-pop {
+  0% { scale: 0.8; }
+  55% { scale: 1.14; }
+  100% { scale: 1; }
+}
+
+/* each new screen in the panel rises in, and its rows follow one after another */
+.view-enter { animation: rise var(--dur-3) var(--ease-out) both; }
+.view-enter :is(.chips > *, .steps > li, ul.plain > li, .place-list > details) {
+  animation: rise var(--dur-3) var(--ease-out) both;
+}
+.view-enter :is(.chips > *, .steps > li, ul.plain > li, .place-list > details):nth-child(1) { animation-delay: 40ms; }
+.view-enter :is(.chips > *, .steps > li, ul.plain > li, .place-list > details):nth-child(2) { animation-delay: 70ms; }
+.view-enter :is(.chips > *, .steps > li, ul.plain > li, .place-list > details):nth-child(3) { animation-delay: 100ms; }
+.view-enter :is(.chips > *, .steps > li, ul.plain > li, .place-list > details):nth-child(4) { animation-delay: 130ms; }
+.view-enter :is(.chips > *, .steps > li, ul.plain > li, .place-list > details):nth-child(5) { animation-delay: 160ms; }
+.view-enter :is(.chips > *, .steps > li, ul.plain > li, .place-list > details):nth-child(6) { animation-delay: 190ms; }
+.view-enter :is(.chips > *, .steps > li, ul.plain > li, .place-list > details):nth-child(n + 7) { animation-delay: 220ms; }
+@keyframes rise {
+  from { opacity: 0; translate: 0 10px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* an opened group's links fade down into place */
+.place-list details[open] > ul.links { animation: rise var(--dur-2) var(--ease-out); }
+.chev { transition: transform var(--dur-2) var(--ease-spring); }
+
+/* search results and the full-screen search slide up like a pushed screen */
+.results { animation: drop var(--dur-2) var(--ease-out); transform-origin: top center; }
+@keyframes drop {
+  from { opacity: 0; translate: 0 -6px; scale: 0.98; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+.search-page { animation: push-up var(--dur-3) var(--ease-sheet); }
+.rows > li { animation: rise var(--dur-2) var(--ease-out) both; }
+.rows > li:nth-child(2) { animation-delay: 25ms; }
+.rows > li:nth-child(3) { animation-delay: 50ms; }
+.rows > li:nth-child(4) { animation-delay: 75ms; }
+.rows > li:nth-child(n + 5) { animation-delay: 100ms; }
+@keyframes push-up {
+  from { opacity: 0; translate: 0 24px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* toast and the offline pill spring in */
+.toast, .offline-pill { animation: toast-in var(--dur-3) var(--ease-spring); }
+@keyframes toast-in {
+  from { opacity: 0; translate: 0 12px; scale: 0.92; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+
+/* map: the destination pin drops in and the route draws itself from you to it */
+.dest-pin span { animation: pin-drop 520ms var(--ease-spring) both; }
+@keyframes pin-drop {
+  0% { opacity: 0; translate: 0 -16px; scale: 0.6; }
+  60% { opacity: 1; }
+  100% { opacity: 1; translate: 0 0; scale: 1; }
+}
+.route-draw { stroke-dasharray: 1; animation: route-draw 900ms var(--ease-out) both; }
+@keyframes route-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
 /* ── segmented control (Appearance) ── */
 .segmented {
+  position: relative;
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; margin-top: 6px;
   background: var(--surface-2); border-radius: 12px;
 }
+/* one thumb that slides to the chosen option instead of jumping */
+.segmented::before {
+  content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px;
+  width: calc((100% - 16px) / 3); border-radius: 9px;
+  background: var(--surface); box-shadow: var(--shadow-sm);
+  translate: calc(var(--seg, 0) * (100% + 4px)) 0;
+  transition: translate var(--dur-2) var(--ease-spring);
+}
 .segmented button {
+  position: relative; z-index: 1;
   display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 38px;
   border: 0; border-radius: 9px; background: transparent; color: var(--text-2);
   font: inherit; font-size: 0.9rem; font-weight: 550; cursor: pointer;
+  transition: color var(--dur-1) var(--ease-out);
 }
-.segmented button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+.segmented button.on { color: var(--text); }
 
 /* ══ Phone layout (≤ 899 px): app-style shell ══════════════════════════════════════════
    Sizes follow the iOS HIG / Material guidance used by mainstream apps:
@@ -480,7 +580,7 @@ details[open] > summary .chev { transform: rotate(180deg); }
     background: var(--surface); color: var(--text);
     border-top: 1px solid var(--border); border-radius: 20px 20px 0 0;
     box-shadow: 0 -6px 28px rgba(31, 30, 29, 0.14);
-    transition: height 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: height 0.42s var(--ease-sheet);
   }
   .sheet.dragging { transition: none; }
   .sheet-grab { flex: none; height: 28px; display: grid; place-items: center; touch-action: none; cursor: grab; }

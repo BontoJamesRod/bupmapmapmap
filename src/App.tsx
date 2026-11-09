@@ -290,6 +290,9 @@ function Navi({ campus, graph }: Data) {
     );
   }
 
+  // Re-keying the panel on each screen change (viewKey, above) replays its enter animation.
+  const screen = <div key={viewKey} className="view-enter">{panel}</div>;
+
   const ThemeIcon = theme.pref === "dark" ? Moon : theme.pref === "light" ? Sun : Monitor;
   const themeLabel = theme.pref === "system" ? "Theme: match device" : `Theme: ${theme.pref}`;
 
@@ -341,12 +344,12 @@ function Navi({ campus, graph }: Data) {
           {view.name === "search" ? (
             <SearchPage search={search} popular={popular} onPick={(p) => go(href.place(p.id))} onClose={() => go(href.home())} />
           ) : (
-            <BottomSheet snap={snap} onSnap={setSnap} label="Details">{panel}</BottomSheet>
+            <BottomSheet snap={snap} onSnap={setSnap} label="Details">{screen}</BottomSheet>
           )}
           <TabBar view={view} />
         </>
       ) : (
-        <aside className="panel" aria-label="Details">{panel}</aside>
+        <aside className="panel" aria-label="Details">{screen}</aside>
       )}
 
       {toast && <div className="toast" role="status">{toast}</div>}
@@ -377,7 +380,12 @@ function About({ campus, theme, onTheme }: { campus: Campus; theme: ThemePref; o
       <p className="note">Student project, not an official Bicol University service.</p>
       <section className="facts">
         <h3 id="appearance-label">Appearance</h3>
-        <div className="segmented" role="radiogroup" aria-labelledby="appearance-label">
+        <div
+          className="segmented"
+          role="radiogroup"
+          aria-labelledby="appearance-label"
+          style={{ "--seg": THEMES.findIndex((t) => t.value === theme) } as React.CSSProperties}
+        >
           {THEMES.map(({ value, label, Icon }) => (
             <button key={value} role="radio" aria-checked={theme === value} className={theme === value ? "on" : ""} onClick={() => onTheme(value)}>
               <Icon size={16} aria-hidden /> {label}
