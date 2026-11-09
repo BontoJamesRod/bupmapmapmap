@@ -7,7 +7,7 @@
 SCNavi depended on one person's Firebase project (Auth + Firestore) plus Google Maps and Gemini API keys. The campus data was locked inside it, others couldn't run it, and the login excluded visitors. The new goal is campus *navigation* only.
 
 ## Decision
-Build BUPC Navi as a **static SPA** (Vite + React + TypeScript) hosted on **GitHub Pages**. There is no runtime server, database or authentication. All data processing happens at build time in CI, and all interaction happens in the browser.
+Build BUP Navi as a **static SPA** (Vite + React + TypeScript) hosted on **GitHub Pages**. There is no runtime server, database or authentication. All data processing happens at build time in CI, and all interaction happens in the browser.
 
 ## Alternatives considered
 | Option | Why not |

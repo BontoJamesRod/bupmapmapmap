@@ -1,4 +1,4 @@
-# BUPC Navi: campus place overrides
+# BUP Navi: campus place overrides
 # Keys are stable IDs. NEVER rename a key once published; change `name` instead.
 # Seeded 2026-11-07 from the OSM snapshot plus web research. Updated 2026-11-08 from a student's annotated map.
 # Layout: `hallway: true` draws a hallway down the middle of the building, following its shape;

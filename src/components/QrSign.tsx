@@ -44,7 +44,7 @@ export function QrSign({ place }: { place: Place }) {
         </svg>
         <p className="qr-cta serif">Scan for walking directions</p>
         <p className="qr-url">{url}</p>
-        <p className="qr-foot">BUPC Navi · open campus map of BU Polangui · no login</p>
+        <p className="qr-foot">BUP Navi · open campus map of BU Polangui · no login</p>
       </article>
     </div>
   );

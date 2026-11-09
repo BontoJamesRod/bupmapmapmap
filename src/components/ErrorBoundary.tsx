@@ -9,7 +9,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { error: E
   }
 
   componentDidCatch(error: Error) {
-    console.error("BUPC Navi crashed:", error);
+    console.error("BUP Navi crashed:", error);
   }
 
   render() {

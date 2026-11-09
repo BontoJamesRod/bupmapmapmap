@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **System** | BUPC Navi |
+| **System** | BUP Navi |
 | **Version** | 1.0 (draft) |
 | **Date** | 2026-11-07 |
 | **Structure** | Loosely follows ISO/IEC/IEEE 29148 |
@@ -10,10 +10,10 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-This document defines what BUPC Navi v1.0 must do (functional requirements) and how well it must do it (non-functional requirements). It is the reference for design, implementation, testing and acceptance.
+This document defines what BUP Navi v1.0 must do (functional requirements) and how well it must do it (non-functional requirements). It is the reference for design, implementation, testing and acceptance.
 
 ### 1.2 Scope
-BUPC Navi is a static, client-side web application. It displays an interactive map of Bicol University Polangui Campus (Centro Occidental, Polangui, Albay) and lets anyone search for places and get walking directions without an account. Scope boundaries are in the [Project Charter §4](01-project-charter.md#4-scope).
+BUP Navi is a static, client-side web application. It displays an interactive map of Bicol University Polangui Campus (Centro Occidental, Polangui, Albay) and lets anyone search for places and get walking directions without an account. Scope boundaries are in the [Project Charter §4](01-project-charter.md#4-scope).
 
 ### 1.3 Definitions
 
@@ -38,7 +38,7 @@ BUPC Navi is a static, client-side web application. It displays an interactive m
 ## 2. Overall description
 
 ### 2.1 Product perspective
-BUPC Navi is a standalone, self-contained product. It is not connected to any BU information system. It consumes a versioned campus dataset that ships with the app and is derived from OpenStreetMap. It optionally consumes third-party basemap tiles.
+BUP Navi is a standalone, self-contained product. It is not connected to any BU information system. It consumes a versioned campus dataset that ships with the app and is derived from OpenStreetMap. It optionally consumes third-party basemap tiles.
 
 ```mermaid
 flowchart LR

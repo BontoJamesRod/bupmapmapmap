@@ -1,4 +1,4 @@
-# Contributing to BUPC Navi
+# Contributing to BUP Navi
 
 Thanks for helping people find their way around BU Polangui! There are three ways to help, from easiest to most involved.
 

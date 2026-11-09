@@ -8,7 +8,7 @@
 
 ## 1. Architectural style
 
-BUPC Navi is a **static, offline-first single-page application** (SPA). It uses a *build-time data pipeline* in place of a backend:
+BUP Navi is a **static, offline-first single-page application** (SPA). It uses a *build-time data pipeline* in place of a backend:
 
 - All "server" work happens **at build time in CI**: importing OSM data, merging overrides, validating, building the path graph and building the search index.
 - All "runtime" work happens **in the browser**: rendering, search, routing and geolocation.
@@ -22,7 +22,7 @@ The result is ₱0 hosting, no secrets, no server to break, instant offline supp
 flowchart TB
   user([Campus user<br/>visitor / student / staff])
   contrib([Contributor / Maintainer])
-  subgraph sys[BUPC Navi]
+  subgraph sys[BUP Navi]
     app[Web app<br/>static SPA + PWA]
   end
   osm[(OpenStreetMap<br/>Overpass API)]

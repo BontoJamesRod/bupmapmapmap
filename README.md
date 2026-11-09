@@ -1,4 +1,4 @@
-# BUPC Navi
+# BUP Navi
 
 **An open, no-login campus navigation map for Bicol University Polangui Campus.**
 
@@ -47,9 +47,9 @@ Details: [docs/08-deployment.md](docs/08-deployment.md).
 
 ## Why this exists
 
-New students, transferees, parents and visitors regularly get lost looking for the Registrar, the library (2nd floor, Salceda Building) or a specific lab. Campus knowledge is passed around by word of mouth. BUPC Navi puts that knowledge into one public map that anyone can open and anyone can help keep accurate.
+New students, transferees, parents and visitors regularly get lost looking for the Registrar, the library (2nd floor, Salceda Building) or a specific lab. Campus knowledge is passed around by word of mouth. BUP Navi puts that knowledge into one public map that anyone can open and anyone can help keep accurate.
 
-This project is an independent successor to **SCNavi** (2nd-year capstone, Blockers United, 2025–2026). SCNavi was a login-based portal built on Firebase. BUPC Navi keeps the core idea, campus navigation, and drops everything that required accounts. See [Project Charter](docs/01-project-charter.md).
+This project is an independent successor to **SCNavi** (2nd-year capstone, Blockers United, 2025–2026). SCNavi was a login-based portal built on Firebase. BUP Navi keeps the core idea, campus navigation, and drops everything that required accounts. See [Project Charter](docs/01-project-charter.md).
 
 ## Documentation
 

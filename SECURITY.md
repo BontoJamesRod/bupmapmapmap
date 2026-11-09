@@ -1,7 +1,7 @@
 # Security & Privacy
 
 ## Privacy
-BUPC Navi collects **nothing**:
+BUP Navi collects **nothing**:
 - No accounts, no tracking cookies, no analytics (v1).
 - Your location is used only on your device to draw the "You are here" dot and start directions. It is never sent or stored.
 - The only optional preference saved is your theme (light/dark), stored in your own browser.

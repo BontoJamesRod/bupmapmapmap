@@ -1,6 +1,6 @@
 {
-  "name": "BUPC Navi: BU Polangui campus map",
-  "short_name": "BUPC Navi",
+  "name": "BUP Navi: BU Polangui campus map",
+  "short_name": "BUP Navi",
   "description": "Open campus map and walking directions for Bicol University Polangui Campus. No login.",
   "id": "./",
   "start_url": "./",

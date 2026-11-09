@@ -130,7 +130,7 @@ function Navi({ campus, graph }: Data) {
     view.name === "place" ? byId.get(view.id) ?? null :
     view.name === "route" ? byId.get(view.to) ?? null : null;
   useEffect(() => {
-    const base = "BUPC Navi";
+    const base = "BUP Navi";
     document.title =
       view.name === "route" && selected ? `Directions to ${selected.properties.name} · ${base}` :
       selected ? `${selected.properties.name} · ${base}` :
@@ -309,9 +309,9 @@ function Navi({ campus, graph }: Data) {
       />
 
       <header className="topbar">
-        <a href={href.home()} className="brand" aria-label="BUPC Navi home">
+        <a href={href.home()} className="brand" aria-label="BUP Navi home">
           <Mark size={30} />
-          <span className="wordmark serif">BUPC Navi</span>
+          <span className="wordmark serif">BUP Navi</span>
         </a>
         {mobile ? (
           <a className="search-launch" href={href.search()} aria-label="Search buildings, offices and rooms">
@@ -324,7 +324,7 @@ function Navi({ campus, graph }: Data) {
             <button className="icon-btn floating push" onClick={theme.cycle} aria-label={themeLabel} title={themeLabel}>
               <ThemeIcon size={18} aria-hidden />
             </button>
-            <a href={href.about()} className="icon-btn floating" aria-label="About BUPC Navi" title="About">
+            <a href={href.about()} className="icon-btn floating" aria-label="About BUP Navi" title="About">
               <Info size={18} aria-hidden />
             </a>
           </>
@@ -369,7 +369,7 @@ function About({ campus, theme, onTheme }: { campus: Campus; theme: ThemePref; o
       <header className="card-head">
         <div className="card-title">
           <span className="eyebrow">About</span>
-          <h2 id="about-title" className="serif">BUPC Navi</h2>
+          <h2 id="about-title" className="serif">BUP Navi</h2>
         </div>
         <a className="icon-btn" href={href.home()} aria-label="Close"><X size={18} aria-hidden /></a>
       </header>

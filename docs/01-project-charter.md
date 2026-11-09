@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Project** | BUPC Navi: Campus Navigation for Bicol University Polangui Campus |
+| **Project** | BUP Navi: Campus Navigation for Bicol University Polangui Campus |
 | **Document version** | 1.0 (draft) |
 | **Date** | 2026-11-07 |
 | **Status** | Proposed |

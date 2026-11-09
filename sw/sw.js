@@ -1,4 +1,4 @@
-/* BUPC Navi service worker. Generated into dist/sw.js at build time by vite.config.ts:
+/* BUP Navi service worker. Generated into dist/sw.js at build time by vite.config.ts:
  * The version and precache placeholders below are replaced with the build's hash and file list.
  *
  * Strategy
